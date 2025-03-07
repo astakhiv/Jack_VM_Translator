@@ -1,6 +1,8 @@
 import fs from "node:fs"
 import { ALCMap } from "./ALCTemplates.js";
 import { MACMap } from "./MACTemplates.js";
+import { ALCList, MACList, BCList, FCList } from "./CommandLists.js";
+import { BCMap } from "./BCTemplates.js";
 
 let eqC = 0;
 let gtC = 0;
@@ -41,7 +43,8 @@ function getCommands(file) {
     for (let i = 0; i < file.length; i++) {
         const c = file[i];
 
-        if (c === "\n" || c === "\r") {
+        if (c === "\n" || c === "\r" || c === "\t") {
+            command = command.trim();
             if (command.length > 0) {
                 commands.push(command);
             }
@@ -54,10 +57,13 @@ function getCommands(file) {
             command += c;
         }
     }
-
+    
+    command = command.trim();
     if (command.length > 0) {
         commands.push(command);
     }
+    
+    console.log(commands);
 
     return commands;
 }
@@ -68,10 +74,17 @@ function parseCommands(commands) {
     for (let i = 0; i < commands.length; i++) {
         const command = commands[i].split(" ");
 
-        if (command.length === 1) {
-            asmCode += "// " + commands[i] + "\n" + getArithmeticLogicCommandCode(command[0]);
-        } else if (command.length === 3) {
-            asmCode += "// " + commands[i] + "\n" + getMemoryAccessCommandCode(command);
+
+
+        if (ALCList[command[0]]) {
+            asmCode += "// " + commands[i] + "\n" + getArithmeticLogicCommandCode(command[0]) + "\n";
+        } else if (MACList[command[0]]) {
+            asmCode += "// " + commands[i] + "\n" + getMemoryAccessCommandCode(command) + "\n\n";
+        } else if (BCList[command[0]]) {
+            // TODO: Branching control logic
+            asmCode += "// " + commands[i] + "\n" + getBranchingCommandCode(command) + "\n\n";
+        } else if (FCList[command[0]]) {
+            // TODO: function command logic
         }
     }
 
@@ -103,3 +116,8 @@ function getMemoryAccessCommandCode(command) {
     return MACMap[command[0]][command[1]](command[2]);
 }
 
+function getBranchingCommandCode(command) {
+    const f = BCMap[command[0]];
+
+    return f(command[1]);
+}

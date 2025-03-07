@@ -1,13 +1,11 @@
 import { getFileName } from "./VMTranslator.js";
 
 const writeToStack = 
-`
-@SP
+`@SP
 A=M
 M=D
 @SP
-M=M+1
-`;
+M=M+1`;
 
 // Push commands
 const getPushTemplate = (i, name) => 
@@ -16,31 +14,29 @@ D=A
 @${name}
 D=D+M
 A=D
-D=M` + writeToStack;
+D=M` + "\n" + writeToStack;
 
-const getPushConstant = (i) => `@${i}\nD=A` + writeToStack;
+const getPushConstant = (i) => `@${i}\nD=A` + "\n" + writeToStack;
 
 const getPushStatic = (i) => {
     const name = `${getFileName()}.${i}`;
 
-    return (`@${name}\nD=M` + writeToStack);
+    return (`@${name}\nD=M` + "\n" + writeToStack);
 };
 
-const getPushPointer = (i) => {
-    const param = (i === '0') ? "THIS" : "THAT";
-    return (
-    `@${param}
-    D=M` + writeToStack
-    );
-}
+const getPushPointer = (i) =>
+(`@${(i === '0') ? "THIS" : "THAT"}
+D=M` + "\n" + writeToStack);
+    
+
 
 const getPushTemp = (i) => 
-`@${i}
+(`@${i}
 D=A
 @5
 D=D+A
 A=D
-D=M` + writeToStack;
+D=M` + "\n" + writeToStack);
 
 ///////////////////
 //               //
@@ -63,8 +59,7 @@ M=D
 @${i}
 D=A
 @${name}
-M=M-D
-`;
+M=M-D`;
 
 const getPopStatic = (i) => {
     const name = `${getFileName()}.${i}`;
@@ -75,23 +70,20 @@ M=M-1
 A=M
 D=M
 @${name}
-M=D
-`
+M=D`
 );
 };
 
 
 const getPopPointer = (i) => {
     const param = (i === '0') ? "THIS" : "THAT";
-    console.log("i:", i, "param:", param);
     return (
     `@SP
     M=M-1
     A=M
     D=M
     @${param}
-    M=D
-    `);
+    M=D`);
 };
 
 const getPopTemp = (i) => 
@@ -109,8 +101,7 @@ A=M
 D=M
 @temp_index
 A=M
-M=D
-`;
+M=D`;
 
 export const MACMap = {
     "push": {

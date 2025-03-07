@@ -8,8 +8,7 @@ M=M-1
 A=M
 M=D+M
 @SP
-M=M+1
-`;
+M=M+1`;
 
 const getSub = () => 
 `@SP
@@ -21,8 +20,7 @@ M=M-1
 A=M
 M=M-D
 @SP
-M=M+1
-`;
+M=M+1`;
 
 const getNeg = () => 
 `@SP
@@ -30,8 +28,7 @@ M=M-1
 A=M
 M=-M
 @SP
-M=M+1
-`;
+M=M+1`;
 
 const getEq = (n) => 
 `@SP
@@ -57,8 +54,7 @@ M=0
   0;JMP
 (END_EQ_${n})
   @SP
-  M=M+1
-`;
+  M=M+1`;
 
 
 const getGt = (n) => 
@@ -85,8 +81,7 @@ M=0
   0;JMP
 (END_GT_${n})
   @SP
-  M=M+1
-`;
+  M=M+1`;
 
 const getLt = (n) => 
 `@SP
@@ -112,8 +107,7 @@ M=0
   0;JMP
 (END_LT_${n})
   @SP
-  M=M+1
-`;
+  M=M+1`;
 
 const getAnd = () => 
 `@SP
@@ -125,8 +119,7 @@ M=M-1
 A=M
 M=D&M
 @SP
-M=M+1
-`;
+M=M+1`;
 
 
 const getOr = () => 
@@ -139,8 +132,7 @@ M=M-1
 A=M
 M=D|M
 @SP
-M=M+1
-`;
+M=M+1`;
 
 const getNot = () => 
 `@SP
@@ -148,8 +140,7 @@ M=M-1
 A=M
 M=!M
 @SP
-M=M+1
-`;
+M=M+1`;
 
 export const ALCMap = {
     "add": getAdd,
