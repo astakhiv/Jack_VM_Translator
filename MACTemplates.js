@@ -1,4 +1,4 @@
-import { getFileName } from "./VMTranslator.js";
+import { curFile } from "./VMTranslator.js";
 
 const writeToStack = 
 `@SP
@@ -19,7 +19,7 @@ D=M` + "\n" + writeToStack;
 const getPushConstant = (i) => `@${i}\nD=A` + "\n" + writeToStack;
 
 const getPushStatic = (i) => {
-    const name = `${getFileName()}.${i}`;
+    const name = `${curFile}.${i}`;
 
     return (`@${name}\nD=M` + "\n" + writeToStack);
 };
@@ -62,7 +62,7 @@ D=A
 M=M-D`;
 
 const getPopStatic = (i) => {
-    const name = `${getFileName()}.${i}`;
+    const name = `${curFile}.${i}`;
 
     return (
 `@SP
@@ -78,12 +78,12 @@ M=D`
 const getPopPointer = (i) => {
     const param = (i === '0') ? "THIS" : "THAT";
     return (
-    `@SP
-    M=M-1
-    A=M
-    D=M
-    @${param}
-    M=D`);
+`@SP
+M=M-1
+A=M
+D=M
+@${param}
+M=D`);
 };
 
 const getPopTemp = (i) => 

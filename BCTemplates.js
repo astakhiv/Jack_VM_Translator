@@ -1,19 +1,21 @@
+import { curFile, stack } from "./VMTranslator.js";
+
 function getLable(name) {
-    return `(${name})`;
+    return `(${curFile}.${stack[stack.length-1]}$${name})`;
 }
 
 function getGoto(name) {
-    return `@${name}\n0;JMP`;
+    return `@${curFile}.${stack[stack.length-1]}$${name}\n0;JMP`;
 }
 
 function getIfGoto(name) {
     return (
 `@SP
-D=M-1
+M=M-1
 A=M
 D=M
-@${name}
-D;JEQ`);
+@${curFile}.${stack[stack.length-1]}$${name}
+D;JNE`);
 }
 
 export const BCMap = {
